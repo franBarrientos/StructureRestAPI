@@ -1,16 +1,23 @@
 const { Router } = require("express");
-const { getUsers, getUser, createUser, updateUser, deleteUser} = require("../controllers/usersController")
+const {
+  getUsers,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser,
+} = require("../controllers/userController");
+const { userValidator } = require("../validators/userValidator");
 const router = Router();
 
 router
   .get("/", getUsers)
 
   .get("/:id", getUser)
-  
-  .post("/", createUser)
 
-  .patch("/:id",updateUser )
+  .post("/", userValidator, createUser)
 
-  .delete("/:id",deleteUser );
+  .patch("/:id", updateUser)
+
+  .delete("/:id", deleteUser);
 
 module.exports = router;
