@@ -6,7 +6,11 @@ const {
   updateUser,
   deleteUser,
 } = require("../controllers/userController");
-const { userValidator } = require("../validators/userValidator");
+const {
+  createUserValidator,
+  idUserValidator,
+  JWTValidator
+} = require("../validators/userValidator");
 const router = Router();
 
 router
@@ -14,10 +18,10 @@ router
 
   .get("/:id", getUser)
 
-  .post("/", userValidator, createUser)
+  .post("/", createUserValidator, createUser)
 
-  .patch("/:id", updateUser)
+  .patch("/:id", idUserValidator, updateUser)
 
-  .delete("/:id", deleteUser);
+  .delete("/:id", [ JWTValidator, idUserValidator], deleteUser);
 
 module.exports = router;
