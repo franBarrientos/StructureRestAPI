@@ -13,4 +13,16 @@ const LoginValidator = [
     }
   },
 ];
-module.exports = { LoginValidator };
+
+const googleValidator = [
+  check("id_token").exists().notEmpty(),
+  async (req, res, next) => {
+    try {
+      validationResult(req).throw();
+      next();
+    } catch (error) {
+      handleError(res, "ERROR_GOOGLE", 403, error);
+    }
+  },
+]
+module.exports = { LoginValidator, googleValidator };

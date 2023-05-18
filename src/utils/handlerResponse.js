@@ -1,7 +1,7 @@
 const handleSucces = (res, data, status = 200) => {
   res.json({
-    error: "",
     body: data,
+    error: ""
   });
 };
 const handleError = (res, error, status = 500, errorDev = "") => {

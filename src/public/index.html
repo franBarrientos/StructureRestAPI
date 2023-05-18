@@ -1,12 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Hola soy Frannn</h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google Sign In</title>
+  </head>
+  <body
+    style="
+      flex: auto;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <h1 style="font-size: 3rem">Google Sign In</h1>
+
+    <div
+      id="g_id_onload"
+      data-client_id="795187356260-b05f7ohbscv1ipdbkck1kkbifd8q5k47.apps.googleusercontent.com"
+      data-auto_prompt="false"
+      data-callback="handleCredentialResponse"
+    ></div>
+    <div
+      class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="left"
+    ></div>
+    <button id="logoutButton">Log Out</button>
+    <script>
+      function handleCredentialResponse(response) {
+        //Google Token
+        fetch("http://localhost:3000/api/auth/google", {
+          method: "POST",
+          headers: {
+            "content-Type": "application/json",
+          },
+          body: JSON.stringify({ id_token: response.credential }),
+        })
+          .then((res) => res.json())
+          .then((data) => localStorage.setItem("email", data.body.user.email))
+      }
+      const logoutButton = document.getElementById("logoutButton");
+
+      // Agregar listener al botón de "Cerrar sesión"
+      logoutButton.addEventListener("click", () => {
+            google.accounts.id.revoke(localStorage.getItem("email"), done=>{
+                localStorage.clear();
+                location.reload();
+            } )
+      });
+    </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </body>
 </html>

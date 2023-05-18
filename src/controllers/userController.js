@@ -5,11 +5,11 @@ const { encrypt, compare } = require("../utils/handleHashPassword");
 const getUsers = async (req, res) => {
   try {
     const { limit = 5, from = 0 } = req.query;
-    const [allUsers, total] = await Promise.all([
+    const [allUsers, count] = await Promise.all([
       UserModel.find({ state: true }).skip(Number(from)).limit(Number(limit)),
       UserModel.countDocuments({ state: true }),
     ]);
-    handleSucces(res, { users: allUsers, total });
+    handleSucces(res, { users: allUsers, count });
   } catch (error) {
     handleError(res, "ERROR_GET_USERS", 500, error);
   }
