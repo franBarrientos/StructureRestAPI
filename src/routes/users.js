@@ -20,8 +20,8 @@ router
 
   .post("/", createUserValidator, createUser)
 
-  .patch("/:id", idUserValidator, updateUser)
+  .patch("/:id", idUserValidator, updateUser) 
 
-  .delete("/:id", [ JWTValidator, idUserValidator], deleteUser);
+  .delete("/:id", [ JWTValidator(["ADMIN_ROLE"]), idUserValidator], deleteUser);
 
 module.exports = router;

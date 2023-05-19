@@ -8,10 +8,10 @@ router
 
     .get("/:id", [checkCategorieExist], getCategorie)
 
-    .post("/", [JWTValidator, CategorieValidator], createCategorie)
+    .post("/", [JWTValidator(["USER_ROLE", "ADMIN_ROLE"]), CategorieValidator], createCategorie)
 
-    .patch("/:id", [JWTValidator, checkCategorieExist, CategorieValidator], updateCategorie)
+    .patch("/:id", [JWTValidator(["USER_ROLE", "ADMIN_ROLE"]), checkCategorieExist, CategorieValidator], updateCategorie)
 
-    .delete("/:id", [], deleteCategorie)
+    .delete("/:id", [JWTValidator([ "ADMIN_ROLE"]), checkCategorieExist], deleteCategorie)
 
 module.exports = router;

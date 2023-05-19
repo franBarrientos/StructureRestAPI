@@ -1,6 +1,11 @@
 const UserModel = require("../models/user");
-const { handleSucces, handleError } = require("../utils/handlerResponse");
-const { encrypt, compare } = require("../utils/handleHashPassword");
+const {
+  handleSucces,
+  handleError,
+  encrypt,
+  compare,
+  handleMessageDelete,
+} = require("../utils");
 
 const getUsers = async (req, res) => {
   try {
@@ -49,12 +54,17 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    console.log("The administrator is ", req.administrator);
     const { id } = req.params;
-    const user = await UserModel.findByIdAndUpdate(id, {state:false}, {
-      new: true,
-    });
-    handleSucces(res, {user, administrator:req.administrator});
+    const { administrator } = req;
+    const user = await UserModel.findByIdAndUpdate(
+      id,
+      { state: false },
+      {
+        new: true,
+      }
+    );
+    handleMessageDelete(administrator, user);
+    handleSucces(res, { user, administrator: req.administrator });
   } catch (error) {
     handleError(res, "DELETE_ERROR", 500, error);
   }

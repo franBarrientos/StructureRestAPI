@@ -31,13 +31,13 @@ const idUserValidator = [
   },
 ];
 
-const JWTValidator = async (req, res, next) => {
+const JWTValidator = (roles)=>async (req, res, next) => {
   const { authorization } = req.headers;
   try {
     if (!authorization) throw new Error("Not Exist Token");
     const { id, role } = verifyToken(authorization.split(" ").pop());
 //    if (role != "ADMIN_ROLE") throw new Error("Not Authorizate");
-    haveRol(["ADMIN_ROLE"], role);
+    haveRol(roles, role);
     const administrator = await UserModel.findOne({_id:id})
     if(!administrator) throw new Error("Administrator Not Found");
     if(!administrator.state) throw new Error("False State");

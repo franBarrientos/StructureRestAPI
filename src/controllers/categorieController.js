@@ -46,10 +46,11 @@ const createCategorie = async (req, res) => {
 const updateCategorie = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, user } = req.body;
+    const { user,state, ...data } = req.body;
+    data.name = data.name.toUpperCase();
     const updatedCategorie = await CategorieModel.findByIdAndUpdate(
       id,
-      { name, user },
+      data,
       { new: true }
     );
     handleSucces(res, updatedCategorie);
@@ -60,8 +61,22 @@ const updateCategorie = async (req, res) => {
 
 const deleteCategorie = async (req, res) => {
   try {
-    handleSucces(res, "Working...");
-  } catch (error) {}
+    const { id } = req.params;
+    const { administrator } = req;
+    const deletedCategorie = await CategorieModel.findByIdAndUpdate(
+      id,
+      {
+        state: false,
+      },
+      {
+        new: true,
+      }
+    );
+    handleMessageDelete(administrator, deletedCategorie);
+    handleSucces(res, {categorie:deletedCategorie, administrator});
+  } catch (error) {
+    handleError(res, "DELETE_CATEGORIE_ERROR", 500, error);
+  }
 };
 
 module.exports = {
